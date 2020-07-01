@@ -20,7 +20,7 @@ static const char col_gray4[]       = "#eeeeee";
 static const char col_cyan[]        = "#005743";
 static const char *colors[][3]      = {
 	/*               fg         bg         border   */
-	[SchemeNorm] = { col_gray3, col_gray1, col_gray2 },
+	[SchemeNorm] = { col_gray3, col_gray1, col_gray1 },
 	[SchemeSel]  = { col_gray4, col_cyan,  col_cyan  },
 };
 
@@ -44,9 +44,9 @@ static const int resizehints = 1;    /* 1 means respect size hints in tiled resi
 
 static const Layout layouts[] = {
 	/* symbol     arrange function */
-	{ "[]=",      tile },    /* first entry is default */
-	{ "><>",      NULL },    /* no layout function means floating behavior */
-	{ "[M]",      monocle },
+	{ "tile",       tile },    /* first entry is default */
+	{ "float",      NULL },    /* no layout function means floating behavior */
+	{ "monocle", monocle },
 };
 
 /* key definitions */
@@ -90,7 +90,8 @@ static Key keys[] = {
 	{ MODKEY,                       XK_period, focusmon,       {.i = +1 } },
 	{ MODKEY|ShiftMask,             XK_comma,  tagmon,         {.i = -1 } },
 	{ MODKEY|ShiftMask,             XK_period, tagmon,         {.i = +1 } },
-  { 0, XF86XK_MonBrightnessUp,	spawn,		SHCMD("xbacklight -inc 1") },
+
+  { 0, XF86XK_MonBrightnessUp,	  spawn,		SHCMD("xbacklight -inc 1") },
 	{ 0, XF86XK_MonBrightnessDown,	spawn,		SHCMD("xbacklight -dec 1") },
 
 	{ MODKEY|ShiftMask,             XK_period, tagmon,         {.i = +1 } },
