@@ -1,7 +1,7 @@
-#include <X11/XF86keysym.h> 
+#include <X11/XF86keysym.h>
 /*
-XF86XK_MonBrightnessUp    
-XF86XK_MonBrightnessDown  
+XF86XK_MonBrightnessUp
+XF86XK_MonBrightnessDown
 */
 
 /* See LICENSE file for copyright and license details. */
@@ -40,13 +40,15 @@ static const Rule rules[] = {
 /* layout(s) */
 static const float mfact     = 0.55; /* factor of master area size [0.05..0.95] */
 static const int nmaster     = 1;    /* number of clients in master area */
-static const int resizehints = 1;    /* 1 means respect size hints in tiled resizals */
+static const int resizehints = 0;    /* 1 means respect size hints in tiled resizals */
 
 static const Layout layouts[] = {
 	/* symbol     arrange function */
 	{ "[tile]",       tile },    /* first entry is default */
 	{ "[float]",      NULL },    /* no layout function means floating behavior */
 	{ "[monocle]", monocle },
+	{ "[cMaster]", centeredmaster}, /* TODO : centeredmaster patch*/
+	{ "[cFltMaster]", centeredfloatingmaster}, /* TODO : centeredmaster patch*/
 };
 
 /* key definitions */
@@ -83,6 +85,8 @@ static Key keys[] = {
 	{ MODKEY,                       XK_f,      setlayout,      {.v = &layouts[1]} },
 	{ MODKEY,                       XK_m,      setlayout,      {.v = &layouts[2]} },
 	{ MODKEY,                       XK_space,  setlayout,      {0} },
+  { MODKEY,                       XK_u,      setlayout,      {.v = &layouts[3]} }, /* TODO : centeredmaster patch*/
+  { MODKEY,                       XK_o,      setlayout,      {.v = &layouts[4]} }, /* TODO : centeredmaster patch*/
 	{ MODKEY|ShiftMask,             XK_space,  togglefloating, {0} },
 	{ MODKEY,                       XK_0,      view,           {.ui = ~0 } },
 	{ MODKEY|ShiftMask,             XK_0,      tag,            {.ui = ~0 } },
