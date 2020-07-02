@@ -15,10 +15,10 @@
             "-D_POSIX_C_SOURCE=2",
             "-DVERSION=\"6.2\"",
             "-DXINERAMA",
-            "dwm.c"
+            "drw.c"
         ],
         "directory": "/home/base/build/dwm",
-        "file": "dwm.c"
+        "file": "drw.c"
     },
     {
         "arguments": [
@@ -57,9 +57,9 @@
             "-D_POSIX_C_SOURCE=2",
             "-DVERSION=\"6.2\"",
             "-DXINERAMA",
-            "drw.c"
+            "dwm.c"
         ],
         "directory": "/home/base/build/dwm",
-        "file": "drw.c"
+        "file": "dwm.c"
     }
 ]
