@@ -47,8 +47,8 @@ static const Layout layouts[] = {
 	{ "[tile]",       tile },    /* first entry is default */
 	{ "[float]",      NULL },    /* no layout function means floating behavior */
 	{ "[monocle]", monocle },
-	{ "[cMaster]", centeredmaster}, /* TODO */
-	{ "[cFltMaster]", centeredfloatingmaster}, /* TODO */
+	{ "[cMaster]", centeredmaster}, /* TODO : centeredmaster patch*/
+	{ "[cFltMaster]", centeredfloatingmaster}, /* TODO : centeredmaster patch*/
 };
 
 /* key definitions */
@@ -85,8 +85,8 @@ static Key keys[] = {
 	{ MODKEY,                       XK_f,      setlayout,      {.v = &layouts[1]} },
 	{ MODKEY,                       XK_m,      setlayout,      {.v = &layouts[2]} },
 	{ MODKEY,                       XK_space,  setlayout,      {0} },
-  { MODKEY,                       XK_u,      setlayout,      {.v = &layouts[3]} }, /* TODO */
-  { MODKEY,                       XK_o,      setlayout,      {.v = &layouts[4]} }, /* TODO */
+  { MODKEY,                       XK_u,      setlayout,      {.v = &layouts[3]} }, /* TODO : centeredmaster patch*/
+  { MODKEY,                       XK_o,      setlayout,      {.v = &layouts[4]} }, /* TODO : centeredmaster patch*/
 	{ MODKEY|ShiftMask,             XK_space,  togglefloating, {0} },
 	{ MODKEY,                       XK_0,      view,           {.ui = ~0 } },
 	{ MODKEY|ShiftMask,             XK_0,      tag,            {.ui = ~0 } },
