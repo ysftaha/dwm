@@ -41,13 +41,8 @@ static const Layout layouts[] = {
 	{ "[tile]",       tile },    /* first entry is default */
 	{ "[float]",      NULL },    /* no layout function means floating behavior */
 	{ "[monocle]", monocle },
-<<<<<<< HEAD
 	{ "[cMaster]", centeredmaster}, /* TODO : centeredmaster patch*/
 	{ "[cFltMaster]", centeredfloatingmaster}, /* TODO : centeredmaster patch*/
-=======
-	{ "[cMaster]", centeredmaster}, 
-	{ "[cFltMaster]", centeredfloatingmaster}, 
->>>>>>> initial_rice
 };
 
 /* key definitions */
@@ -84,13 +79,8 @@ static Key keys[] = {
 	{ MODKEY,                       XK_f,      setlayout,      {.v = &layouts[1]} },
 	{ MODKEY,                       XK_m,      setlayout,      {.v = &layouts[2]} },
 	{ MODKEY,                       XK_space,  setlayout,      {0} },
-<<<<<<< HEAD
   { MODKEY,                       XK_u,      setlayout,      {.v = &layouts[3]} }, /* TODO : centeredmaster patch*/
   { MODKEY,                       XK_o,      setlayout,      {.v = &layouts[4]} }, /* TODO : centeredmaster patch*/
-=======
-  { MODKEY,                       XK_u,      setlayout,      {.v = &layouts[3]} }, 
-  { MODKEY,                       XK_o,      setlayout,      {.v = &layouts[4]} }, 
->>>>>>> initial_rice
 	{ MODKEY|ShiftMask,             XK_space,  togglefloating, {0} },
 	{ MODKEY,                       XK_0,      view,           {.ui = ~0 } },
 	{ MODKEY|ShiftMask,             XK_0,      tag,            {.ui = ~0 } },
@@ -121,7 +111,7 @@ static Button buttons[] = {
 	/* click                event mask      button          function        argument */
 	{ ClkLtSymbol,          0,              Button1,        setlayout,      {0} },
 	{ ClkLtSymbol,          0,              Button3,        setlayout,      {.v = &layouts[2]} },
-+	{ ClkWinTitle,          0,              Button1,        togglewin,      {0} },
+ 	{ ClkWinTitle,          0,              Button1,        togglewin,      {0} },
 	{ ClkWinTitle,          0,              Button2,        zoom,           {0} },
 	{ ClkStatusText,        0,              Button2,        spawn,          {.v = termcmd } },
 	{ ClkClientWin,         MODKEY,         Button1,        movemouse,      {0} },
