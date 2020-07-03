@@ -49,8 +49,9 @@
 #define CLEANMASK(mask)         (mask & ~(numlockmask|LockMask) & (ShiftMask|ControlMask|Mod1Mask|Mod2Mask|Mod3Mask|Mod4Mask|Mod5Mask))
 #define INTERSECT(x,y,w,h,m)    (MAX(0, MIN((x)+(w),(m)->wx+(m)->ww) - MAX((x),(m)->wx)) \
                                * MAX(0, MIN((y)+(h),(m)->wy+(m)->wh) - MAX((y),(m)->wy)))
-#define ISVISIBLEONTAG(C, T)    ((C->tags & T))
-#define ISVISIBLE(C)            ISVISIBLEONTAG(C, C->mon->tagset[C->mon->seltags])
+/*#define ISVISIBLE(C)            ISVISIBLEONTAG(C, C->mon->tagset[C->mon->seltags])*/ // FIXME attach aside
+/*#define ISVISIBLEONTAG(C, T)    ((C->tags & T))*/ // FIXME attach aside
+#define ISVISIBLE(C)            ((C->tags & C->mon->tagset[C->mon->seltags]))
 #define HIDDEN(C)               ((getstate(C->win) == IconicState))
 #define LENGTH(X)               (sizeof X / sizeof X[0])
 #define MOUSEMASK               (BUTTONMASK|PointerMotionMask)
@@ -61,7 +62,7 @@
 
 /* enums */
 enum { CurNormal, CurResize, CurMove, CurLast }; /* cursor */
-enum { SchemeNorm, SchemeSel, SchemeHid }; /* color schemes */
+enum { SchemeNorm, SchemeSel, SchemeHid, SchemeTabActive, SchemeTabInactive }; /* color schemes */
 enum { NetSupported, NetWMName, NetWMState, NetWMCheck,
        NetWMFullscreen, NetActiveWindow, NetWMWindowType,
        NetWMWindowTypeDialog, NetClientList, NetLast }; /* EWMH atoms */
@@ -151,7 +152,8 @@ static int applysizehints(Client *c, int *x, int *y, int *w, int *h, int interac
 static void arrange(Monitor *m);
 static void arrangemon(Monitor *m);
 static void attach(Client *c);
-static void attachaside(Client *c);
+static void attachbottom(Client *c);
+/*static void attachaside(Client *c);*/ // FIXME attachaside
 static void attachstack(Client *c);
 static void buttonpress(XEvent *e);
 static void checkotherwm(void);
@@ -191,7 +193,7 @@ static void monocle(Monitor *m);
 static void deck(Monitor *m);
 static void motionnotify(XEvent *e);
 static void movemouse(const Arg *arg);
-static Client *nexttagged(Client *c);
+/*static Client *nexttagged(Client *c);*/ // FIXME attachaside
 static Client *nexttiled(Client *c);
 static void pop(Client *);
 static void propertynotify(XEvent *e);
@@ -391,6 +393,99 @@ applysizehints(Client *c, int *x, int *y, int *w, int *h, int interact)
 	return *x != c->x || *y != c->y || *w != c->w || *h != c->h;
 }
 
+
+void
+bartabdraw(Monitor *m, Client *c, int unused, int x, int w, int groupactive) {
+	if (!c) return;
+	int i, nclienttags = 0, nviewtags = 0;
+
+	drw_setscheme(drw, scheme[
+		m->sel == c ? SchemeSel : (groupactive ? SchemeTabActive: SchemeTabInactive)
+	]);
+	drw_text(drw, x, 0, w, bh, lrpad / 2, c->name, 0);
+
+	// Floating win indicator
+	if (c->isfloating) drw_rect(drw, x + 2, 2, 5, 5, 0, 0);
+
+	// Optional borders between tabs
+	if (BARTAB_BORDERS) {
+		XSetForeground(drw->dpy, drw->gc, drw->scheme[ColBorder].pixel);
+		XFillRectangle(drw->dpy, drw->drawable, drw->gc, x, 0, 1, bh);
+		XFillRectangle(drw->dpy, drw->drawable, drw->gc, x + w, 0, 1, bh);
+	}
+
+	// Optional tags icons
+	for (i = 0; i < LENGTH(tags); i++) {
+		if ((m->tagset[m->seltags] >> i) & 1) { nviewtags++; }
+		if ((c->tags >> i) & 1) { nclienttags++; }
+	}
+	if (BARTAB_TAGSINDICATOR == 2 || nclienttags > 1 || nviewtags > 1) {
+		for (i = 0; i < LENGTH(tags); i++) {
+			drw_rect(drw,
+				( x + w - 2 - ((LENGTH(tags) / BARTAB_TAGSROWS) * BARTAB_TAGSPX)
+					- (i % (LENGTH(tags)/BARTAB_TAGSROWS)) + ((i % (LENGTH(tags) / BARTAB_TAGSROWS)) * BARTAB_TAGSPX)
+				),
+				( 2 + ((i / (LENGTH(tags)/BARTAB_TAGSROWS)) * BARTAB_TAGSPX)
+					- ((i / (LENGTH(tags)/BARTAB_TAGSROWS)))
+				),
+				BARTAB_TAGSPX, BARTAB_TAGSPX, (c->tags >> i) & 1, 0
+			);
+		}
+	}
+}
+
+void
+battabclick(Monitor *m, Client *c, int passx, int x, int w, int unused) {
+	if (passx >= x && passx <= x + w) {
+		focus(c);
+		restack(selmon);
+	}
+}
+
+void
+bartabcalculate(
+	Monitor *m, int offx, int sw, int passx,
+	void(*tabfn)(Monitor *, Client *, int, int, int, int)
+) {
+	Client *c;
+	int
+		i, clientsnmaster = 0, clientsnstack = 0, clientsnfloating = 0,
+		masteractive = 0, fulllayout = 0, floatlayout = 0,
+		x, w, tgactive;
+
+	for (i = 0, c = m->clients; c; c = c->next) {
+		if (!ISVISIBLE(c)) continue;
+		if (c->isfloating) { clientsnfloating++; continue; }
+		if (m->sel == c) { masteractive = i < m->nmaster; }
+		if (i < m->nmaster) { clientsnmaster++; } else { clientsnstack++; }
+		i++;
+	}
+	for (i = 0; i < LENGTH(bartabfloatfns); i++) if (m ->lt[m->sellt]->arrange == bartabfloatfns[i]) { floatlayout = 1; break; }
+	for (i = 0; i < LENGTH(bartabmonfns); i++) if (m ->lt[m->sellt]->arrange == bartabmonfns[i]) { fulllayout = 1; break; }
+	for (c = m->clients, i = 0; c; c = c->next) {
+		if (!ISVISIBLE(c)) continue;
+		if (clientsnmaster + clientsnstack == 0 || floatlayout) {
+			 x = offx + (((m->mw - offx - sw) / (clientsnmaster + clientsnstack + clientsnfloating)) * i);
+			 w = (m->mw - offx - sw) / (clientsnmaster + clientsnstack + clientsnfloating);
+			 tgactive = 1;
+		} else if (!c->isfloating && (fulllayout || ((clientsnmaster == 0) ^ (clientsnstack == 0)))) {
+			 x = offx + (((m->mw - offx - sw) / (clientsnmaster + clientsnstack)) * i);
+			 w = (m->mw - offx - sw) / (clientsnmaster + clientsnstack);
+			 tgactive = 1;
+		} else if (i < m->nmaster && !c->isfloating) {
+			 x = offx + ((((m->mw * m->mfact) - offx) /clientsnmaster) * i);
+			 w = ((m->mw * m->mfact) - offx) / clientsnmaster;
+			 tgactive = masteractive;
+		} else if (!c->isfloating) {
+			 x = (m->mw * m->mfact) + ((((m->mw * (1 - m->mfact)) - sw) / clientsnstack) * (i - m->nmaster));
+			 w = ((m->mw * (1 - m->mfact)) - sw) / clientsnstack;
+			 tgactive = !masteractive;
+		} else continue;
+		tabfn(m, c, passx, x, w, tgactive);
+		i++;
+	}
+}
+
 void
 arrange(Monitor *m)
 {
@@ -421,7 +516,21 @@ attach(Client *c)
 }
 
 void
-attachaside(Client *c) {
+attachbottom(Client *c)
+{
+	Client *below = c->mon->clients;
+	for (; below && below->next; below = below->next);
+	c->next = NULL;
+	if (below)
+		below->next = c;
+	else
+		c->mon->clients = c;
+}
+
+/* FIXME attachaside
+void
+attachaside(Client *c) 
+{
 	Client *at = nexttagged(c);
 	if(!at) {
 		attach(c);
@@ -430,7 +539,7 @@ attachaside(Client *c) {
 	c->next = at->next;
 	at->next = c;
 }
-
+*/
 
 void
 attachstack(Client *c)
@@ -465,25 +574,10 @@ buttonpress(XEvent *e)
 			arg.ui = 1 << i;
 		} else if (ev->x < x + blw)
 			click = ClkLtSymbol;
-    /* 2px right padding */
-		else if (ev->x > selmon->ww - TEXTW(stext) + lrpad - 2)
+		else if (ev->x > selmon->ww - TEXTW(stext))
 			click = ClkStatusText;
-    else {
-      x += blw;
-      c = m->clients;
-
-      do {
-        if (!ISVISIBLE(c))
-          continue;
-        else
-          x += (1.0 / (double)m->bt) * m->btw;
-      } while (ev->x > x && (c = c->next));
-
-      if (c) {
-        click = ClkWinTitle;
-        arg.v = c;
-      }
-    }
+		else // Focus clicked tab bar item
+			bartabcalculate(selmon, x, TEXTW(stext) - lrpad + 2, ev->x, battabclick);
 	} else if ((c = wintoclient(ev->window))) {
 		focus(c);
 		restack(selmon);
@@ -493,7 +587,7 @@ buttonpress(XEvent *e)
 	for (i = 0; i < LENGTH(buttons); i++)
 		if (click == buttons[i].click && buttons[i].func && buttons[i].button == ev->button
 		&& CLEANMASK(buttons[i].mask) == CLEANMASK(ev->state))
-			buttons[i].func((click == ClkTagBar || click == ClkWinTitle) && buttons[i].arg.i == 0 ? &arg : &buttons[i].arg);
+			buttons[i].func(click == ClkTagBar && buttons[i].arg.i == 0 ? &arg : &buttons[i].arg);
 }
 
 void
@@ -761,7 +855,7 @@ dirtomon(int dir)
 void
 drawbar(Monitor *m)
 {
-	int x, w, sw = 0, n = 0, scm;
+	int x, w, sw = 0;
 	int boxs = drw->fonts->h / 9;
 	int boxw = drw->fonts->h / 6 + 2;
 	unsigned int i, occ = 0, urg = 0;
@@ -775,8 +869,6 @@ drawbar(Monitor *m)
 	}
 
 	for (c = m->clients; c; c = c->next) {
-    if (ISVISIBLE(c))
-      n++;
 		occ |= c->tags;
 		if (c->isurgent)
 			urg |= c->tags;
@@ -797,36 +889,12 @@ drawbar(Monitor *m)
 	x = drw_text(drw, x, 0, w, bh, lrpad / 2, m->ltsymbol, 0);
 
 	if ((w = m->ww - sw - x) > bh) {
-    if (n > 0) {
-      int remainder = w % n;
-      int tabw = (1.0 / (double)n) * w + 1;
-      for (c = m->clients; c; c = c->next) {
-        if (!ISVISIBLE(c))
-          continue;
-        if (m->sel == c)
-          scm = SchemeSel;
-        else if (HIDDEN(c))
-          scm = SchemeHid;
-        else
-          scm = SchemeNorm;
-        drw_setscheme(drw, scheme[scm]);
-
-        if (remainder >= 0) {
-          if (remainder == 0) {
-            tabw--;
-          }
-          remainder--;
-        }
-        drw_text(drw, x, 0, tabw, bh, lrpad / 2, c->name, 0);
-        x += tabw;
-      }
-		} else {
-			drw_setscheme(drw, scheme[SchemeNorm]);
-			drw_rect(drw, x, 0, w, bh, 1, 1);
+		bartabcalculate(m, x, sw, -1, bartabdraw);
+		if (BARTAB_BOTTOMBORDER) {
+			drw_setscheme(drw, scheme[SchemeTabActive]);
+			drw_rect(drw, 0, bh - 1, m->ww, 1, 1, 0);
 		}
 	}
-  m -> bt = n;
-  m -> btw = w;
 	drw_map(drw, m->barwin, 0, 0, m->ww, bh);
 }
 
@@ -1175,7 +1243,8 @@ manage(Window w, XWindowAttributes *wa)
 		c->isfloating = c->oldstate = trans != None || c->isfixed;
 	if (c->isfloating)
 		XRaiseWindow(dpy, c->win);
-	attachaside(c);
+	/*attachaside(c);*/ // FIXME atachaside
+  attachbottom(c);
 	attachstack(c);
 	XChangeProperty(dpy, root, netatom[NetClientList], XA_WINDOW, 32, PropModeAppend,
 		(unsigned char *) &(c->win), 1);
@@ -1307,8 +1376,10 @@ movemouse(const Arg *arg)
 	}
 }
 
+/* FIXME atachaside
  Client *
-nexttagged(Client *c) {
+nexttagged(Client *c) 
+{
 	Client *walked = c->mon->clients;
 	for(;
 		walked && (walked->isfloating || !ISVISIBLEONTAG(walked, c->tags));
@@ -1316,6 +1387,7 @@ nexttagged(Client *c) {
 	);
 	return walked;
 }
+*/
 
 Client *
 nexttiled(Client *c)
@@ -1542,7 +1614,8 @@ sendmon(Client *c, Monitor *m)
 	detachstack(c);
 	c->mon = m;
 	c->tags = m->tagset[m->seltags]; /* assign tags of target monitor */
-	attachaside(c);
+	/*attachaside(c);*/ // FIXME attachaside
+  attachbottom(c);
 	attachstack(c);
 	focus(NULL);
 	arrange(NULL);
@@ -2074,7 +2147,8 @@ updategeom(void)
 					detachstack(c);
 					c->mon = mons;
 					attach(c);
-					attachaside(c);
+					/*attachaside(c);*/ // FIXME attachaside
+					attachbottom(c);
 					attachstack(c);
 				}
 				if (m == selmon)
