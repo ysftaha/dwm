@@ -49,8 +49,6 @@
 #define CLEANMASK(mask)         (mask & ~(numlockmask|LockMask) & (ShiftMask|ControlMask|Mod1Mask|Mod2Mask|Mod3Mask|Mod4Mask|Mod5Mask))
 #define INTERSECT(x,y,w,h,m)    (MAX(0, MIN((x)+(w),(m)->wx+(m)->ww) - MAX((x),(m)->wx)) \
                                * MAX(0, MIN((y)+(h),(m)->wy+(m)->wh) - MAX((y),(m)->wy)))
-/*#define ISVISIBLE(C)            ISVISIBLEONTAG(C, C->mon->tagset[C->mon->seltags])*/ // FIXME attach aside
-/*#define ISVISIBLEONTAG(C, T)    ((C->tags & T))*/ // FIXME attach aside
 #define ISVISIBLE(C)            ((C->tags & C->mon->tagset[C->mon->seltags]))
 #define HIDDEN(C)               ((getstate(C->win) == IconicState))
 #define LENGTH(X)               (sizeof X / sizeof X[0])
@@ -153,7 +151,6 @@ static void arrange(Monitor *m);
 static void arrangemon(Monitor *m);
 static void attach(Client *c);
 static void attachbottom(Client *c);
-/*static void attachaside(Client *c);*/ // FIXME attachaside
 static void fullscreen(const Arg *arg);
 static void attachstack(Client *c);
 static void buttonpress(XEvent *e);
@@ -194,7 +191,6 @@ static void monocle(Monitor *m);
 static void deck(Monitor *m);
 static void motionnotify(XEvent *e);
 static void movemouse(const Arg *arg);
-/*static Client *nexttagged(Client *c);*/ // FIXME attachaside
 static Client *nexttiled(Client *c);
 static void pop(Client *);
 static void propertynotify(XEvent *e);
@@ -528,20 +524,6 @@ attachbottom(Client *c)
 		c->mon->clients = c;
 }
 
-/* FIXME attachaside
-void
-attachaside(Client *c) 
-{
-	Client *at = nexttagged(c);
-	if(!at) {
-		attach(c);
-		return;
-		}
-	c->next = at->next;
-	at->next = c;
-}
-*/
-
 void
 attachstack(Client *c)
 {
@@ -790,6 +772,7 @@ destroynotify(XEvent *e)
 		unmanage(c, 1);
 }
 
+// TODO multiple masters -> vertical tiling
 void
 deck(Monitor *m) {
 	unsigned int i, n, h, mw, my;
@@ -801,7 +784,7 @@ deck(Monitor *m) {
 
 	if(n > m->nmaster) {
 		mw = m->nmaster ? m->ww * m->mfact : 0;
-		snprintf(m->ltsymbol, sizeof m->ltsymbol, "[%d]", n - m->nmaster);
+		snprintf(m->ltsymbol, sizeof m->ltsymbol, "[deck: %d]", n - m->nmaster);
 	}
 	else
 		mw = m->ww;
@@ -1244,7 +1227,6 @@ manage(Window w, XWindowAttributes *wa)
 		c->isfloating = c->oldstate = trans != None || c->isfixed;
 	if (c->isfloating)
 		XRaiseWindow(dpy, c->win);
-	/*attachaside(c);*/ // FIXME atachaside
   attachbottom(c);
 	attachstack(c);
 	XChangeProperty(dpy, root, netatom[NetClientList], XA_WINDOW, 32, PropModeAppend,
@@ -1376,19 +1358,6 @@ movemouse(const Arg *arg)
 		focus(NULL);
 	}
 }
-
-/* FIXME atachaside
- Client *
-nexttagged(Client *c) 
-{
-	Client *walked = c->mon->clients;
-	for(;
-		walked && (walked->isfloating || !ISVISIBLEONTAG(walked, c->tags));
-		walked = walked->next
-	);
-	return walked;
-}
-*/
 
 Client *
 nexttiled(Client *c)
@@ -1615,7 +1584,6 @@ sendmon(Client *c, Monitor *m)
 	detachstack(c);
 	c->mon = m;
 	c->tags = m->tagset[m->seltags]; /* assign tags of target monitor */
-	/*attachaside(c);*/ // FIXME attachaside
   attachbottom(c);
 	attachstack(c);
 	focus(NULL);
@@ -2161,7 +2129,6 @@ updategeom(void)
 					detachstack(c);
 					c->mon = mons;
 					attach(c);
-					/*attachaside(c);*/ // FIXME attachaside
 					attachbottom(c);
 					attachstack(c);
 				}
