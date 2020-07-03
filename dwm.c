@@ -158,6 +158,7 @@ static void checkotherwm(void);
 static void cleanup(void);
 static void cleanupmon(Monitor *mon);
 static void clientmessage(XEvent *e);
+static void col(Monitor *);
 static void configure(Client *c);
 static void configurenotify(XEvent *e);
 static void configurerequest(XEvent *e);
@@ -845,7 +846,7 @@ void
 focus(Client *c)
 {
   if (!c || !ISVISIBLE(c) || HIDDEN(c))
-    for (c = selmon->stack; c && (!ISVISIBLE(c) || HIDDEN(c)); c = c->snext);
+    for (c = selmon->stack; c && (!ISVISIBLE(c) || HIDDEN(c)); c = c->snext){};
 	if (selmon->sel && selmon->sel != c)
 		unfocus(selmon->sel, 0);
 	if (c) {
@@ -1293,7 +1294,7 @@ nexttagged(Client *c) {
 Client *
 nexttiled(Client *c)
 {
-  for (; c && (c->isfloating || !ISVISIBLE(c) || HIDDEN(c)); c = c->next);
+  for (; c && (c->isfloating || !ISVISIBLE(c) || HIDDEN(c)); c = c->next){};
 	return c;
 }
 
@@ -1777,6 +1778,32 @@ tagmon(const Arg *arg)
 	if (!selmon->sel || !mons->next)
 		return;
 	sendmon(selmon->sel, dirtomon(arg->i));
+}
+
+void
+col(Monitor *m) 
+{
+  unsigned int i, n, h, w, x, y,mw;
+  Client *c;
+
+  for(n = 0, c = nexttiled(m->clients); c; c = nexttiled(c->next), n++);
+  if(n == 0)
+    return;
+  if(n > m->nmaster)
+    mw = m->nmaster ? m->ww * m->mfact : 0;
+  else
+    mw = m->ww;
+  for(i = x = y = 0, c = nexttiled(m->clients); c; c = nexttiled(c->next), i++) {
+    if(i < m->nmaster) {
+      w = (mw - x) / (MIN(n, m->nmaster)-i);
+      resize(c, x + m->wx, m->wy, w - (2*c->bw), m->wh - (2*c->bw), False);
+      x += WIDTH(c);
+    } else {
+      h = (m->wh - y) / (n - i);
+      resize(c, x + m->wx, m->wy + y, m->ww - x  - (2*c->bw), h - (2*c->bw), False);
+      y += HEIGHT(c);
+    }
+  }
 }
 
 void
