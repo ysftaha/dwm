@@ -1,6 +1,4 @@
 #include <X11/XF86keysym.h>
-#include "drw.h"
-
 
 /* appearance */
 static const unsigned int borderpx  = 3;        /* border pixel of windows */
@@ -31,8 +29,8 @@ static const Rule rules[] = {
 	 *	WM_NAME(STRING) = title
 	 */
 	/* class      instance    title       tags mask     isfloating   monitor */
-	{ "Gimp",     NULL,       NULL,       0,            1,           -1 },
-	{ "Firefox",  NULL,       NULL,       1 << 8,       0,           -1 },
+	{ "Gimp",         NULL,       NULL,       0,            1,           -1 },
+	{ "qutebrowser",  NULL,       NULL,       1 << 3,       0,           -1 },
 };
 
 /* layout(s) */
