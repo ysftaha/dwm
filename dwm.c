@@ -243,9 +243,7 @@ static int xerror(Display *dpy, XErrorEvent *ee);
 static int xerrordummy(Display *dpy, XErrorEvent *ee);
 static int xerrorstart(Display *dpy, XErrorEvent *ee);
 static void zoom(const Arg *arg);
-
-static void centeredmaster(Monitor *m); /* TODO : centeredmaster patch*/
-static void centeredfloatingmaster(Monitor *m); /* TODO : centeredmaster patch*/
+static void centeredmaster(Monitor *m);
 
 /* variables */
 static const char broken[] = "broken";
@@ -442,8 +440,8 @@ battabclick(Monitor *m, Client *c, int passx, int x, int w, int unused) {
 void
 bartabcalculate(
 	Monitor *m, int offx, int sw, int passx,
-	void(*tabfn)(Monitor *, Client *, int, int, int, int)
-) {
+	void(*tabfn)(Monitor *, Client *, int, int, int, int)) 
+{
 	Client *c;
 	int
 		i, clientsnmaster = 0, clientsnstack = 0, clientsnfloating = 0,
@@ -1277,7 +1275,7 @@ monocle(Monitor *m)
 		if (ISVISIBLE(c))
 			n++;
 	if (n > 0) /* override layout symbol */
-		snprintf(m->ltsymbol, sizeof m->ltsymbol, "[%d]", n);
+		snprintf(m->ltsymbol, sizeof m->ltsymbol, "[monocle: %d]", n);
 	for (c = nexttiled(m->clients); c; c = nexttiled(c->next))
 		resize(c, m->wx, m->wy, m->ww - 2 * c->bw, m->wh - 2 * c->bw, 0);
 }
@@ -1670,7 +1668,7 @@ fullscreen(const Arg *arg)
 {
 	if (selmon->showbar) {
 		for(last_layout = (Layout *)layouts; last_layout != selmon->lt[selmon->sellt]; last_layout++);
-		setlayout(&((Arg) { .v = &layouts[2] }));
+		setlayout(&((Arg) {.v = &layouts[2] }));
 	} else {
 		setlayout(&((Arg) { .v = last_layout }));
 	}
