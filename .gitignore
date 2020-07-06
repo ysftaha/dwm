@@ -2,3 +2,4 @@
 dwm
 .clangd/
 .clangd/**
+config.h
