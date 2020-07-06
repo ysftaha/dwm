@@ -111,8 +111,6 @@ typedef struct {
 	void (*arrange)(Monitor *);
 } Layout;
 
-typedef struct Pertag Pertag;
-
 struct Monitor {
 	char ltsymbol[16];
 	float mfact;
@@ -134,7 +132,6 @@ struct Monitor {
 	Window barwin;
 	Window extrabarwin;
 	const Layout *lt[2];
-	Pertag *pertag;
 };
 
 typedef struct {
@@ -624,7 +621,6 @@ void
 cleanupmon(Monitor *mon)
 {
 	Monitor *m;
-	unsigned int i;
 
 	if (mon == mons)
 		mons = mons->next;

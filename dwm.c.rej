@@ -1,48 +1,6 @@
-diff --git a/dwm.c b/dwm.c
-index 4465af1..6474055 100644
---- a/dwm.c
-+++ b/dwm.c
-@@ -111,6 +111,7 @@ typedef struct {
- 	void (*arrange)(Monitor *);
- } Layout;
- 
-+typedef struct Pertag Pertag;
- struct Monitor {
- 	char ltsymbol[16];
- 	float mfact;
-@@ -130,6 +131,7 @@ struct Monitor {
- 	Monitor *next;
- 	Window barwin;
- 	const Layout *lt[2];
-+	Pertag *pertag;
- };
- 
- typedef struct {
-@@ -271,6 +273,15 @@ static Window root, wmcheckwin;
- /* configuration, allows nested code to access above variables */
- #include "config.h"
- 
-+struct Pertag {
-+	unsigned int curtag, prevtag; /* current and previous tag */
-+	int nmasters[LENGTH(tags) + 1]; /* number of windows in master area */
-+	float mfacts[LENGTH(tags) + 1]; /* mfacts per tag */
-+	unsigned int sellts[LENGTH(tags) + 1]; /* selected layouts */
-+	const Layout *ltidxs[LENGTH(tags) + 1][2]; /* matrix of tags and layouts indexes  */
-+	int showbars[LENGTH(tags) + 1]; /* display bar for the current tag */
-+};
-+
- /* compile-time check if all tags fit into an unsigned int bit array. */
- struct NumTags { char limitexceeded[LENGTH(tags) > 31 ? -1 : 1]; };
- 
-@@ -631,6 +642,7 @@ Monitor *
- createmon(void)
- {
- 	Monitor *m;
-+	unsigned int i;
- 
- 	m = ecalloc(1, sizeof(Monitor));
- 	m->tagset[0] = m->tagset[1] = 1;
-@@ -641,6 +653,20 @@ createmon(void)
+--- dwm.c
++++ dwm.c
+@@ -653,6 +665,20 @@ createmon(void)
  	m->lt[0] = &layouts[0];
  	m->lt[1] = &layouts[1 % LENGTH(layouts)];
  	strncpy(m->ltsymbol, layouts[0].symbol, sizeof m->ltsymbol);
@@ -63,7 +21,7 @@ index 4465af1..6474055 100644
  	return m;
  }
  
-@@ -966,7 +992,7 @@ grabkeys(void)
+@@ -978,7 +1004,7 @@ grabkeys(void)
  void
  incnmaster(const Arg *arg)
  {
@@ -72,7 +30,7 @@ index 4465af1..6474055 100644
  	arrange(selmon);
  }
  
-@@ -1501,9 +1527,9 @@ void
+@@ -1513,9 +1539,9 @@ void
  setlayout(const Arg *arg)
  {
  	if (!arg || !arg->v || arg->v != selmon->lt[selmon->sellt])
@@ -84,7 +42,7 @@ index 4465af1..6474055 100644
  	strncpy(selmon->ltsymbol, selmon->lt[selmon->sellt]->symbol, sizeof selmon->ltsymbol);
  	if (selmon->sel)
  		arrange(selmon);
-@@ -1522,7 +1548,7 @@ setmfact(const Arg *arg)
+@@ -1534,7 +1560,7 @@ setmfact(const Arg *arg)
  	f = arg->f < 1.0 ? arg->f + selmon->mfact : arg->f - 1.0;
  	if (f < 0.1 || f > 0.9)
  		return;
@@ -93,7 +51,7 @@ index 4465af1..6474055 100644
  	arrange(selmon);
  }
  
-@@ -1699,7 +1725,7 @@ tile(Monitor *m)
+@@ -1711,7 +1737,7 @@ tile(Monitor *m)
  void
  togglebar(const Arg *arg)
  {
@@ -102,7 +60,7 @@ index 4465af1..6474055 100644
  	updatebarpos(selmon);
  	XMoveResizeWindow(dpy, selmon->barwin, selmon->wx, selmon->by, selmon->ww, bh);
  	arrange(selmon);
-@@ -1738,9 +1764,33 @@ void
+@@ -1750,9 +1776,33 @@ void
  toggleview(const Arg *arg)
  {
  	unsigned int newtagset = selmon->tagset[selmon->seltags] ^ (arg->ui & TAGMASK);
@@ -136,7 +94,7 @@ index 4465af1..6474055 100644
  		focus(NULL);
  		arrange(selmon);
  	}
-@@ -2035,11 +2085,37 @@ updatewmhints(Client *c)
+@@ -2047,11 +2097,37 @@ updatewmhints(Client *c)
  void
  view(const Arg *arg)
  {
