@@ -134,7 +134,7 @@ struct Monitor {
 	Window barwin;
 	Window extrabarwin;
 	const Layout *lt[2];
-	Pertag *pertag;
+  Pertag *pertag;
 };
 
 typedef struct {
@@ -287,6 +287,7 @@ struct Pertag {
 	const Layout *ltidxs[LENGTH(tags) + 1][2]; /* matrix of tags and layouts indexes  */
 	int showbars[LENGTH(tags) + 1]; /* display bar for the current tag */
 };
+
 
 /* compile-time check if all tags fit into an unsigned int bit array. */
 struct NumTags { char limitexceeded[LENGTH(tags) > 31 ? -1 : 1]; };
@@ -1932,6 +1933,7 @@ toggleview(const Arg *arg)
 		if (newtagset == ~0) {
 			selmon->pertag->prevtag = selmon->pertag->curtag;
 			selmon->pertag->curtag = 0;
+
 		}
 
 		/* test if the user did not select the same tag */
