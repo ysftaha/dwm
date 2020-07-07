@@ -1,4 +1,6 @@
 *.o
+*.rej
+*.orig
 dwm
 .clangd/
 .clangd/**
