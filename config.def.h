@@ -7,7 +7,13 @@ static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
 static const int focusonwheel       = 0;
 static const char statussep         = ';';      /* separator between status bars */
-static const char *fonts[]          = {"DejaVu Sans Mono:pixelsize=12:antialias=true:autohint=true"};
+static const char *fonts[]          = {
+    "DejaVu Sans Mono:pixelsize=12:antialias=true:autohint=true"
+    "hack nerd font mono:pixelsize=13:antialias=true:autohint=true", 
+    "Noto Color Emoji:pixelsize=13:antialias=true:autohint=true:style=Regular",
+    "Symbols Nerd Font:style=2048-em:pixelsize=13:antialias=true:autohint=true"
+    "inconsolata for powerline:pixelsize=13:antialias=true:autohint=true", 
+};
 static const char dmenufont[]       = "DejaVu Sans Mono:pixelsize=12:antialias=true:autohint=true";
 static const char col_gray1[]       = "#000000";
 static const char col_gray2[]       = "#444444";
@@ -16,8 +22,8 @@ static const char col_gray4[]       = "#eeeeee";
 static const char col_cyan[]        = "#005743";
 static const char *colors[][3]      = {
 	//                         fg         bg         border
-	[SchemeNorm]         = { col_gray3, col_gray1, col_gray1 },
-	[SchemeSel]          = { col_gray4, col_cyan,  col_cyan  },
+	[SchemeNorm]         = { col_gray3, col_gray1,  col_gray1 },
+	[SchemeSel]          = { col_gray4, col_cyan,   col_cyan  },
   [SchemeTabActive]    = { col_gray2, col_gray1,  col_gray2 },
   [SchemeTabInactive]  = { col_gray4, col_gray1,  col_gray1 }
 };
