@@ -7,7 +7,7 @@ SRC = drw.c dwm.c util.c
 OBJ = ${SRC:.c=.o}
 
 all: options dwm
-	cp config.def.h $@
+	cp config.def.h config.h
 
 options:
 	@echo dwm build options:
