@@ -8,7 +8,7 @@ static const int topbar             = 1;        /* 0 means bottom bar */
 static const int focusonwheel       = 0;
 static const char statussep         = ';';      /* separator between status bars */
 static const char *fonts[]          = {
-    "DejaVu Sans Mono:pixelsize=12:antialias=true:autohint=true"
+    "DejaVu Sans Mono:pixelsize=12:antialias=true:autohint=true",
     "Font Awesome 5 Free:pixelsize=13:antialias=true:autohint=true", 
 };
 static const char dmenufont[]       = "DejaVu Sans Mono:pixelsize=12:antialias=true:autohint=true";
@@ -33,9 +33,9 @@ static const Rule rules[] = {
 	 *	WM_CLASS(STRING) = instance, class
 	 *	WM_NAME(STRING) = title
 	 */
-	/* class      instance    title       tags mask     isfloating   monitor */
-	{ "Gimp",         NULL,       NULL,       0,            1,           -1 },
-	{ "qutebrowser",  NULL,       NULL,       1 << 3,       0,           -1 },
+	/* class             instance    title       tags mask     isfloating   monitor */
+	{ "Gimp",            NULL,       NULL,       0,            1,           -1 },
+	{ "brave",           NULL,       NULL,       1 << 3,       0,           -1 },
 };
 
 /* layout(s) */
@@ -81,16 +81,19 @@ static const char *termcmd[]  = { "st", NULL };
 #include "movestack.c"
 static Key keys[] = {
 	/* modifier                     key        function        argument */
-	{ MODKEY|ShiftMask,             XK_Return, spawn,          {.v = termcmd } },
-	{ MODKEY,                       XK_p,      spawn,          {.v = dmenucmd } },
+	{ MODKEY,                       XK_Return, spawn,          {.v = termcmd } },
+	{ MODKEY|ShiftMask,             XK_p,      spawn,          {.v = dmenucmd } },
+	{ MODKEY|ShiftMask,             XK_space,  zoom,           {0} },
+	{ MODKEY,                       XK_space,  switchcol,      {0} },
 
 	{ MODKEY,                       XK_j,      focusstack,     {.i = +1 } },
 	{ MODKEY,                       XK_k,      focusstack,     {.i = -1 } },
+	{ MODKEY,                       XK_n,      focusstack,     {.i = +1 } },
+	{ MODKEY,                       XK_p,      focusstack,     {.i = -1 } },
 	{ MODKEY,                       XK_h,      setmfact,       {.f = -0.0125} },
 	{ MODKEY,                       XK_l,      setmfact,       {.f = +0.0125} },
   { MODKEY|ShiftMask,             XK_j,      movestack,      {.i = +1 } },
   { MODKEY|ShiftMask,             XK_k,      movestack,      {.i = -1 } },
-	{ MODKEY,                       XK_space,  switchcol,      {0} },
 
   { MODKEY|ShiftMask,             XK_d,      setlayout,      {.v = &layouts[0]} }, // deck
   { MODKEY|ShiftMask,             XK_m,      setlayout,      {.v = &layouts[1]} }, // Master
@@ -120,6 +123,9 @@ static Key keys[] = {
 
   { 0, XF86XK_MonBrightnessUp,	  spawn,		SHCMD("xbacklight -inc 1") },
 	{ 0, XF86XK_MonBrightnessDown,	spawn,		SHCMD("xbacklight -dec 1") },
+  { 0, XF86XK_AudioMute,       	  spawn,		SHCMD("pulsemixer --toggle-mute") },
+  { 0, XF86XK_AudioRaiseVolume, 	spawn,		SHCMD("pulsemixer --change-volume +1") },
+  { 0, XF86XK_AudioLowerVolume,	  spawn,		SHCMD("pulsemixer --change-volume -1") },
 
 	{ MODKEY|ShiftMask|ControlMask, XK_q,      quit,           {0} },
 
