@@ -18,7 +18,7 @@ static const char col_gray3[]       = "#bbbbbb";
 static const char col_gray4[]       = "#eeeeee";
 static const char col_cyan[]        = "#005743";
 static const char *colors[][3]      = {
-	//                         fg         bg         border
+	/*                         fg         bg         border */
 	[SchemeNorm]         = { col_gray3, col_gray1,  col_gray1 },
 	[SchemeSel]          = { col_gray4, col_cyan,   col_cyan  },
   [SchemeTabActive]    = { col_gray2, col_gray1,  col_gray2 },
@@ -28,11 +28,8 @@ static const char *colors[][3]      = {
 /* tagging */
 static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
 
+/* use xprop to set class */
 static const Rule rules[] = {
-	/* xprop(1):
-	 *	WM_CLASS(STRING) = instance, class
-	 *	WM_NAME(STRING) = title
-	 */
 	/* class             instance    title       tags mask     isfloating   monitor */
 	{ "Gimp",            NULL,       NULL,       0,            1,           -1 },
 	{ "brave",           NULL,       NULL,       1 << 3,       0,           -1 },
@@ -125,10 +122,10 @@ static Key keys[] = {
 
   { 0, XF86XK_MonBrightnessUp,	  spawn,		SHCMD("xbacklight -inc 1") },
 	{ 0, XF86XK_MonBrightnessDown,	spawn,		SHCMD("xbacklight -dec 1") },
-  { 0, XF86XK_AudioRaiseVolume,	  spawn,		SHCMD("pamixer --allow-boost -i 3") },
-  { 0, XF86XK_AudioRaiseVolume,	  spawn,		SHCMD("pamixer --allow-boost -i 3") },
-	{ 0, XF86XK_AudioLowerVolume,	  spawn,		SHCMD("pamixer --allow-boost -d 3") },
-	
+  { 0, XF86XK_AudioMute,       	  spawn,		SHCMD("pulsemixer --toggle-mute") },
+  { 0, XF86XK_AudioRaiseVolume, 	spawn,		SHCMD("pulsemixer --change-volume +1") },
+  { 0, XF86XK_AudioLowerVolume,	  spawn,		SHCMD("pulsemixer --change-volume -1") },
+  { MODKEY, XK_comma,	            spawn,		SHCMD("devtoggle --toggle \"DLL07BE:01 06CB:7A13 Touchpad\"")},
 
 	{ MODKEY|ShiftMask|ControlMask, XK_q,      quit,           {0} },
 
