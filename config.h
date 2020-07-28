@@ -61,11 +61,11 @@ static const Layout layouts[] = {
 
 /* key definitions */
 #define MODKEY Mod4Mask
-#define TAGKEYS(KEY,TAG) \
+#define TAGKEYS(KEY,TAG,VIEW) \
 	{ MODKEY,                       KEY,      view,           {.ui = 1 << TAG} }, \
-	{ MODKEY|ControlMask,           KEY,      toggleview,     {.ui = 1 << TAG} }, \
 	{ MODKEY|ShiftMask,             KEY,      tag,            {.ui = 1 << TAG} }, \
-	{ MODKEY|ControlMask|ShiftMask, KEY,      toggletag,      {.ui = 1 << TAG} },
+	{ MODKEY,                       VIEW,     toggleview,     {.ui = 1 << TAG} }, \
+	{ MODKEY|ShiftMask,             VIEW,     toggletag,      {.ui = 1 << TAG} },
 
 /* helper for spawning shell commands in the pre dwm-5.0 fashion */
 #define SHCMD(cmd) { .v = (const char*[]){ "/bin/sh", "-c", cmd, NULL } }
@@ -108,15 +108,16 @@ static Key keys[] = {
 
   { MODKEY,                       XK_Print,	  spawn,		SHCMD("maim /home/base/sc-shot.png") },
 
-	TAGKEYS(                        XK_1,                      0)
-	TAGKEYS(                        XK_2,                      1)
-	TAGKEYS(                        XK_3,                      2)
-	TAGKEYS(                        XK_4,                      3)
-	TAGKEYS(                        XK_5,                      4)
-	TAGKEYS(                        XK_6,                      5)
-	TAGKEYS(                        XK_7,                      6)
-	TAGKEYS(                        XK_8,                      7)
-	TAGKEYS(                        XK_grave,                  8)
+	TAGKEYS(XK_1,    0, XK_F1)
+	TAGKEYS(XK_2,    1, XK_F2)
+	TAGKEYS(XK_3,    2, XK_F3)
+	TAGKEYS(XK_4,    3, XK_F4)
+	TAGKEYS(XK_5,    4, XK_F5)
+	TAGKEYS(XK_6,    5, XK_F6)
+	TAGKEYS(XK_7,    6, XK_F7)
+	TAGKEYS(XK_8,    7, XK_F8)
+	TAGKEYS(XK_grave,8, XK_F9)
+
 	{ MODKEY,                       XK_0,      view,           {.ui = ~0 } },
 	{ MODKEY|ShiftMask,             XK_0,      tag,            {.ui = ~0 } },
 
