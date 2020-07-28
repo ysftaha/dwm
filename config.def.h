@@ -92,14 +92,14 @@ static Key keys[] = {
   { MODKEY|ShiftMask,             XK_j,      movestack,      {.i = +1 } },
   { MODKEY|ShiftMask,             XK_k,      movestack,      {.i = -1 } },
 
-  { MODKEY|ShiftMask,             XK_d,      setlayout,      {.v = &layouts[0]} }, // deck
+  { MODKEY,                       XK_d,      setlayout,      {.v = &layouts[0]} }, // deck
   { MODKEY|ShiftMask,             XK_m,      setlayout,      {.v = &layouts[1]} }, // Master
 	{ MODKEY,                       XK_m,      setlayout,      {.v = &layouts[2]} }, // Monocle
 	{ MODKEY,                       XK_t,      setlayout,      {.v = &layouts[3]} }, // Tile
   { MODKEY,                       XK_c,      setlayout,      {.v = &layouts[4]} }, // Column
 
-	{ MODKEY,                       XK_i,      incnmaster,     {.i = +1 } },
-	{ MODKEY,                       XK_d,      incnmaster,     {.i = -1 } },
+	{ MODKEY|ShiftMask,             XK_i,      incnmaster,     {.i = +1 } },
+	{ MODKEY|ShiftMask,             XK_d,      incnmaster,     {.i = -1 } },
 
   { MODKEY,                       XK_f,      fullscreen,     {0} },
 	{ MODKEY,                       XK_b,      togglebar,      {0} },
