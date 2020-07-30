@@ -32,7 +32,15 @@ static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
 static const Rule rules[] = {
 	/* class             instance    title       tags mask     isfloating   monitor */
 	{ "Gimp",            NULL,       NULL,       0,            1,           -1 },
-	{ "brave",           NULL,       NULL,       1 << 3,       0,           -1 },
+
+	{ "brave-browser",   NULL,       NULL,       1 << 3,       0,           -1 },
+	{ "Brave-browser",   NULL,       NULL,       1 << 3,       0,           -1 },
+
+  {"org.pwmt.zathura", NULL,       NULL,       1 << 1,       0,           -1 },
+  {"Zathura",          NULL,       NULL,       1 << 1,       0,           -1 },
+
+  {"Anki",             NULL,       NULL,       1 << 2,       0,           -1 },
+  {"anki",             NULL,       NULL,       1 << 2,       0,           -1 }
 };
 
 /* layout(s) */
@@ -116,7 +124,10 @@ static Key keys[] = {
 	TAGKEYS(XK_6,    5, XK_F6)
 	TAGKEYS(XK_7,    6, XK_F7)
 	TAGKEYS(XK_8,    7, XK_F8)
-	TAGKEYS(XK_grave,8, XK_F9)
+
+  { MODKEY|ShiftMask,             XK_grave,  view,        {.ui = 1 << 8} },
+  { MODKEY,                       XK_grave,  toggleview,  {.ui = 1 << 8} },
+	{ MODKEY|ShiftMask,             XK_F9,     toggletag,   {.ui = 1 << 8} },
 
 	{ MODKEY,                       XK_0,      view,           {.ui = ~0 } },
 	{ MODKEY|ShiftMask,             XK_0,      tag,            {.ui = ~0 } },
