@@ -37,7 +37,6 @@ static const Rule rules[] = {
 	{ "Brave-browser",   NULL,       NULL,       1 << 3,       0,           -1 },
 
   {"org.pwmt.zathura", NULL,       NULL,       1 << 1,       0,           -1 },
-  {"Zathura",          NULL,       NULL,       1 << 1,       0,           -1 },
 
   {"Anki",             NULL,       NULL,       1 << 2,       0,           -1 },
   {"anki",             NULL,       NULL,       1 << 2,       0,           -1 }
@@ -83,6 +82,9 @@ static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() 
 static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL };
 static const char *termcmd[]  = { "st", NULL };
 
+static const char scratchpadname[] = "scratchpad"; 
+static const char *scratchpadcmd[] = { "st", "-t", scratchpadname, "-g", "120x34", NULL }; 
+
 #include "movestack.c"
 static Key keys[] = {
 	/* modifier                     key        function        argument */
@@ -124,10 +126,9 @@ static Key keys[] = {
 	TAGKEYS(XK_6,    5, XK_F6)
 	TAGKEYS(XK_7,    6, XK_F7)
 	TAGKEYS(XK_8,    7, XK_F8)
+	TAGKEYS(XK_9,    8, XK_F9)
 
-  { MODKEY|ShiftMask,             XK_grave,  view,        {.ui = 1 << 8} },
-  { MODKEY,                       XK_grave,  toggleview,  {.ui = 1 << 8} },
-	{ MODKEY|ShiftMask,             XK_F9,     toggletag,   {.ui = 1 << 8} },
+ 	{ MODKEY,                       XK_grave,  togglescratch,  {.v = scratchpadcmd } },
 
 	{ MODKEY,                       XK_0,      view,           {.ui = ~0 } },
 	{ MODKEY|ShiftMask,             XK_0,      tag,            {.ui = ~0 } },
