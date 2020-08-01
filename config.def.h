@@ -83,7 +83,7 @@ static const char *dmenucmd[] = { "dmenu_run"};
 static const char *termcmd[]  = { "st", NULL };
 
 static const char scratchpadname[] = "scratchpad"; 
-static const char *scratchpadcmd[] = { "st", "-t", scratchpadname, "-g", "120x34", NULL }; 
+static const char *scratchpadcmd[] = { "st", "-t", scratchpadname, "-g", "128x32", NULL }; 
 
 #include "movestack.c"
 static Key keys[] = {
