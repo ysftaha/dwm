@@ -2,6 +2,7 @@
 
 /* appearance */
 static const unsigned int borderpx  = 3;        /* border pixel of windows */
+static const unsigned int gappx     = 5;        /* gaps between windows */
 static const unsigned int snap      = 0;        /* snap pixel */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
@@ -126,6 +127,10 @@ static Key keys[] = {
 	TAGKEYS(XK_7,    6, XK_F7)
 	TAGKEYS(XK_8,    7, XK_F8)
 	TAGKEYS(XK_9,    8, XK_F9)
+
+  { MODKEY,                       XK_minus,  setgaps,        {.i = -1 } },
+  { MODKEY,                       XK_equal,  setgaps,        {.i = +1 } },
+  { MODKEY|ShiftMask,             XK_equal,  setgaps,        {.i = 0  } },
 
  	{ MODKEY,                       XK_grave,  togglescratch,  {.v = scratchpadcmd } },
 
