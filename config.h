@@ -60,7 +60,7 @@ static const Layout layouts[] = {
 	/* symbol     arrange function */
   { "[deck]",       deck },
 	{ "[cMaster]", centeredmaster},
-	{ "[monocle]", monocle },
+	{ "[fullscr]", monocle },
 	{ "[tile]",       tile },
   { "[column]",      col },
 	{ "[float]",      NULL },
@@ -90,33 +90,31 @@ static Key keys[] = {
 	/* modifier                     key        function        argument */
 	{ MODKEY,                       XK_Return, spawn,          {.v = termcmd } },
 	{ MODKEY|ShiftMask,             XK_p,      spawn,          {.v = dmenucmd } },
+
+  /* windows */
 	{ MODKEY|ShiftMask,             XK_space,  zoom,           {0} },
 	{ MODKEY,                       XK_space,  switchcol,      {0} },
 
+  /* the stack */
 	{ MODKEY,                       XK_j,      focusstack,     {.i = +1 } },
 	{ MODKEY,                       XK_k,      focusstack,     {.i = -1 } },
-	{ MODKEY,                       XK_n,      focusstack,     {.i = +1 } },
-	{ MODKEY,                       XK_p,      focusstack,     {.i = -1 } },
-	{ MODKEY,                       XK_h,      setmfact,       {.f = -0.0125} },
-	{ MODKEY,                       XK_l,      setmfact,       {.f = +0.0125} },
   { MODKEY|ShiftMask,             XK_j,      movestack,      {.i = +1 } },
   { MODKEY|ShiftMask,             XK_k,      movestack,      {.i = -1 } },
 
-  { MODKEY,                       XK_d,      setlayout,      {.v = &layouts[0]} }, // deck
-  { MODKEY|ShiftMask,             XK_m,      setlayout,      {.v = &layouts[1]} }, // Master
-	{ MODKEY,                       XK_m,      setlayout,      {.v = &layouts[2]} }, // Monocle
-	{ MODKEY,                       XK_t,      setlayout,      {.v = &layouts[3]} }, // Tile
-  { MODKEY,                       XK_c,      setlayout,      {.v = &layouts[4]} }, // Column
-
+  /* the master window */
+	{ MODKEY,                       XK_h,      setmfact,       {.f = -0.0125} },
+	{ MODKEY,                       XK_l,      setmfact,       {.f = +0.0125} },
 	{ MODKEY|ShiftMask,             XK_i,      incnmaster,     {.i = +1 } },
 	{ MODKEY|ShiftMask,             XK_d,      incnmaster,     {.i = -1 } },
 
-	{ MODKEY,                       XK_b,      togglebar,      {0} },
-	{ MODKEY,                       XK_Tab,    view,           {0} },
-	{ MODKEY,                       XK_q,      killclient,     {0} },
+  /* Layouts */
+  { MODKEY,                       XK_d,      setlayout,      {.v = &layouts[0]} }, // deck
+  { MODKEY,                       XK_m,      setlayout,      {.v = &layouts[1]} }, // Master
+	{ MODKEY,                       XK_f,      setlayout,      {.v = &layouts[2]} }, // Fullscr
+	{ MODKEY,                       XK_t,      setlayout,      {.v = &layouts[3]} }, // Tile
+  { MODKEY,                       XK_c,      setlayout,      {.v = &layouts[4]} }, // Column
 
-  { MODKEY,                       XK_Print,	  spawn,		SHCMD("maim /home/base/sc-shot.png") },
-
+  /* Tags */
 	TAGKEYS(XK_1,    0, XK_F1)
 	TAGKEYS(XK_2,    1, XK_F2)
 	TAGKEYS(XK_3,    2, XK_F3)
@@ -126,23 +124,30 @@ static Key keys[] = {
 	TAGKEYS(XK_7,    6, XK_F7)
 	TAGKEYS(XK_8,    7, XK_F8)
 	TAGKEYS(XK_9,    8, XK_F9)
+	{ MODKEY,                       XK_0,      view,           {.ui = ~0 } },
+	{ MODKEY|ShiftMask,             XK_0,      tag,            {.ui = ~0 } },
 
+  /* Gaps */
   { MODKEY,                       XK_minus,  setgaps,        {.i = -1 } },
   { MODKEY,                       XK_equal,  setgaps,        {.i = +1 } },
   { MODKEY|ShiftMask,             XK_equal,  setgaps,        {.i = 0  } },
 
+  /* quick utils */
+	{ MODKEY,                       XK_Tab,    view,           {0} },
+	{ MODKEY,                       XK_b,      togglebar,      {0} },
+	{ MODKEY,                       XK_q,      killclient,     {0} },
  	{ MODKEY,                       XK_grave,  togglescratch,  {.v = scratchpadcmd } },
+  { MODKEY,                       XK_Print,	 spawn,		       SHCMD("maim /home/base/sc-shot.png") },
+  { MODKEY,                       XK_comma,  spawn,		       SHCMD("devtoggle --toggle \"DLL07BE:01 06CB:7A13 Touchpad\"")},
 
-	{ MODKEY,                       XK_0,      view,           {.ui = ~0 } },
-	{ MODKEY|ShiftMask,             XK_0,      tag,            {.ui = ~0 } },
+  /* Special keys */
+  { 0,                            XF86XK_MonBrightnessUp,	   spawn,		 SHCMD("xbacklight -inc 1") },
+	{ 0,                            XF86XK_MonBrightnessDown,	 spawn,		 SHCMD("xbacklight -dec 1") },
+  { 0,                            XF86XK_AudioMute,       	 spawn,		 SHCMD("pulsemixer --toggle-mute") },
+  { 0,                            XF86XK_AudioRaiseVolume, 	 spawn,		 SHCMD("pulsemixer --change-volume +1") },
+  { 0,                            XF86XK_AudioLowerVolume,	 spawn,		 SHCMD("pulsemixer --change-volume -1") },
 
-  { 0, XF86XK_MonBrightnessUp,	  spawn,		SHCMD("xbacklight -inc 1") },
-	{ 0, XF86XK_MonBrightnessDown,	spawn,		SHCMD("xbacklight -dec 1") },
-  { 0, XF86XK_AudioMute,       	  spawn,		SHCMD("pulsemixer --toggle-mute") },
-  { 0, XF86XK_AudioRaiseVolume, 	spawn,		SHCMD("pulsemixer --change-volume +1") },
-  { 0, XF86XK_AudioLowerVolume,	  spawn,		SHCMD("pulsemixer --change-volume -1") },
-  { MODKEY, XK_comma,	            spawn,		SHCMD("devtoggle --toggle \"DLL07BE:01 06CB:7A13 Touchpad\"")},
-
+  /* quit */
 	{ MODKEY|ShiftMask|ControlMask, XK_q,      quit,           {0} },
 
   /* FIXME monitor focus shit
