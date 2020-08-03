@@ -31,15 +31,13 @@ static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
 /* use xprop to set class */
 static const Rule rules[] = {
 	/* class             instance    title       tags mask     isfloating   monitor */
-	{ "Gimp",            NULL,       NULL,       0,            1,           -1 },
-
-	{ "brave-browser",   NULL,       NULL,       1 << 3,       0,           -1 },
-	{ "Brave-browser",   NULL,       NULL,       1 << 3,       0,           -1 },
+	{ "brave-browser",   NULL,       NULL,       1 << 2,       0,           -1 },
+	{ "Brave-browser",   NULL,       NULL,       1 << 2,       0,           -1 },
 
   {"org.pwmt.zathura", NULL,       NULL,       1 << 1,       0,           -1 },
 
-  {"Anki",             NULL,       NULL,       1 << 2,       0,           -1 },
-  {"anki",             NULL,       NULL,       1 << 2,       0,           -1 }
+  {"Anki",             NULL,       NULL,       1 << 3,       0,           -1 },
+  {"anki",             NULL,       NULL,       1 << 3,       0,           -1 }
 };
 
 /* layout(s) */
