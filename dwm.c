@@ -169,13 +169,13 @@ static void deck(Monitor *m);
 static void destroynotify(XEvent *e);
 static void detach(Client *c);
 static void detachstack(Client *c);
-static Monitor *dirtomon(int dir);
+/*static Monitor *dirtomon(int dir); TODO Monitor setup*/
 static void drawbar(Monitor *m);
 static void drawbars(void);
 static void expose(XEvent *e);
 static void focus(Client *c);
 static void focusin(XEvent *e);
-static void focusmon(const Arg *arg);
+/*static void focusmon(const Arg *arg); TODO Monitor setup*/
 static void focusstack(const Arg *arg);
 static int getrootptr(int *x, int *y);
 static long getstate(Window w);
@@ -207,7 +207,6 @@ static void setclientstate(Client *c, long state);
 static void setfocus(Client *c);
 static void setfullscreen(Client *c, int fullscreen);
 static void setgaps(const Arg *arg);
-static void fullscreen(const Arg *arg);
 static void setlayout(const Arg *arg);
 static void setmfact(const Arg *arg);
 static void setup(void);
@@ -217,7 +216,7 @@ static void sigchld(int unused);
 static void spawn(const Arg *arg);
 static void switchcol(const Arg *arg);
 static void tag(const Arg *arg);
-static void tagmon(const Arg *arg);
+/*static void tagmon(const Arg *arg); TODO monitor setup*/
 static void tile(Monitor *);
 static void togglebar(const Arg *arg);
 static void togglefloating(const Arg *arg);
@@ -245,7 +244,6 @@ static int xerrordummy(Display *dpy, XErrorEvent *ee);
 static int xerrorstart(Display *dpy, XErrorEvent *ee);
 static void zoom(const Arg *arg);
 static void centeredmaster(Monitor *m);
-static void centeredfloatingmaster(Monitor *m);
 
 /* variables */
 static const char broken[] = "broken";
@@ -631,7 +629,6 @@ void
 cleanupmon(Monitor *mon)
 {
 	Monitor *m;
-	unsigned int i;
 
 	if (mon == mons)
 		mons = mons->next;
@@ -856,6 +853,7 @@ detachstack(Client *c)
 	}
 }
 
+/* TODO Monitor setup
 Monitor *
 dirtomon(int dir)
 {
@@ -870,13 +868,12 @@ dirtomon(int dir)
 		for (m = mons; m->next != selmon; m = m->next);
 	return m;
 }
+*/
 
 void
 drawbar(Monitor *m)
 {
 	int x, w, sw = 0;
-	int boxs = drw->fonts->h / 9;
-	int boxw = drw->fonts->h / 6 + 2;
 	unsigned int i, occ = 0, urg = 0;
 	Client *c;
 
@@ -978,6 +975,7 @@ focusin(XEvent *e)
 		setfocus(selmon->sel);
 }
 
+/* TODO Monitor setup
 void
 focusmon(const Arg *arg)
 {
@@ -991,6 +989,7 @@ focusmon(const Arg *arg)
 	selmon = m;
 	focus(NULL);
 }
+*/
 
 void
 focusstack(const Arg *arg)
@@ -1658,19 +1657,6 @@ setfullscreen(Client *c, int fullscreen)
 	}
 }
 
-Layout *last_layout;
-void
-fullscreen(const Arg *arg)
-{
-	if (selmon->showbar) {
-		for(last_layout = (Layout *)layouts; last_layout != selmon->lt[selmon->sellt]; last_layout++);
-		setlayout(&((Arg) { .v = &layouts[2] }));
-	} else {
-		setlayout(&((Arg) { .v = last_layout }));
-	}
-	togglebar(arg);
-}
-
 void
 setgaps(const Arg *arg)
 {
@@ -1876,6 +1862,7 @@ tag(const Arg *arg)
 	}
 }
 
+/* TODO monitor setup
 void
 tagmon(const Arg *arg)
 {
@@ -1883,7 +1870,7 @@ tagmon(const Arg *arg)
 		return;
 	sendmon(selmon->sel, dirtomon(arg->i));
 }
-
+*/
 
 void
 col(Monitor *m) {
@@ -2539,53 +2526,5 @@ centeredmaster(Monitor *m)
 			       tw - (2*c->bw), h - (2*c->bw), 0);
 			oty += HEIGHT(c);
 		}
-	}
-}
-
-void
-centeredfloatingmaster(Monitor *m)
-{
-	unsigned int i, n, w, mh, mw, mx, mxo, my, myo, tx;
-	Client *c;
-
-	/* count number of clients in the selected monitor */
-	for (n = 0, c = nexttiled(m->clients); c; c = nexttiled(c->next), n++);
-	if (n == 0)
-		return;
-
-	/* initialize nmaster area */
-	if (n > m->nmaster) {
-		/* go mfact box in the center if more than nmaster clients */
-		if (m->ww > m->wh) {
-			mw = m->nmaster ? m->ww * m->mfact : 0;
-			mh = m->nmaster ? m->wh * 0.9 : 0;
-		} else {
-			mh = m->nmaster ? m->wh * m->mfact : 0;
-			mw = m->nmaster ? m->ww * 0.9 : 0;
-		}
-		mx = mxo = (m->ww - mw) / 2;
-		my = myo = (m->wh - mh) / 2;
-	} else {
-		/* go fullscreen if all clients are in the master area */
-		mh = m->wh;
-		mw = m->ww;
-		mx = mxo = 0;
-		my = myo = 0;
-	}
-
-	for(i = tx = 0, c = nexttiled(m->clients); c; c = nexttiled(c->next), i++)
-	if (i < m->nmaster) {
-		/* nmaster clients are stacked horizontally, in the center
-		 * of the screen */
-		w = (mw + mxo - mx) / (MIN(n, m->nmaster) - i);
-		resize(c, m->wx + mx, m->wy + my, w - (2*c->bw),
-		       mh - (2*c->bw), 0);
-		mx += WIDTH(c);
-	} else {
-		/* stack clients are stacked horizontally */
-		w = (m->ww - tx) / (n - i);
-		resize(c, m->wx + tx, m->wy, w - (2*c->bw),
-		       m->wh - (2*c->bw), 0);
-		tx += WIDTH(c);
 	}
 }
