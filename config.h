@@ -81,7 +81,7 @@ static const char *dmenucmd[] = { "dmenu_run"};
 static const char *termcmd[]  = { "st", NULL };
 
 static const char scratchpadname[] = "scratchpad"; 
-static const char *scratchpadcmd[] = { "st", "-t", scratchpadname, "-g", "128x32", NULL }; 
+static const char *scratchpadcmd[] = { "st", "-t", scratchpadname, "-g", "128x40", NULL }; 
 
 #include "movestack.c"
 static Key keys[] = {
@@ -160,10 +160,10 @@ static Key keys[] = {
 /* click can be ClkTagBar, ClkLtSymbol, ClkStatusText, ClkWinTitle, ClkClientWin, or ClkRootWin */
 static Button buttons[] = {
 	/* click                event mask      button          function        argument */
+	{ ClkClientWin,         MODKEY,         Button1,        movemouse,      {0} },
 	{ ClkLtSymbol,          0,              Button1,        setlayout,      {.v = &layouts[5]} },
 	{ ClkWinTitle,          0,              Button2,        zoom,           {0} },
 	{ ClkStatusText,        0,              Button2,        spawn,          {.v = termcmd } },
-	{ ClkClientWin,         MODKEY,         Button1,        movemouse,      {0} },
 	{ ClkClientWin,         MODKEY,         Button2,        togglefloating, {0} },
 	{ ClkClientWin,         MODKEY,         Button3,        resizemouse,    {0} },
 	{ ClkTagBar,            0,              Button1,        view,           {0} },

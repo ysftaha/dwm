@@ -1966,8 +1966,9 @@ togglescratch(const Arg *arg)
 			focus(c);
 			restack(selmon);
 		}
-	} else
+	} else {
 		spawn(arg);
+  }
 }
 
 void
