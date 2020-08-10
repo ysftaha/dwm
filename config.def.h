@@ -12,6 +12,7 @@ static const char *fonts[]          = {
     "DejaVu Sans Mono:pixelsize=12:antialias=true:autohint=true",
     "Font Awesome 5 Free:pixelsize=13:antialias=true:autohint=true", 
 };
+
 static const char col_gray1[]       = "#000000";
 static const char col_gray2[]       = "#444444";
 static const char col_gray3[]       = "#bbbbbb";
@@ -135,7 +136,7 @@ static Key keys[] = {
 	{ MODKEY,                       XK_b,      togglebar,      {0} },
 	{ MODKEY,                       XK_q,      killclient,     {0} },
  	{ MODKEY,                       XK_grave,  togglescratch,  {.v = scratchpadcmd } },
-  { MODKEY,                       XK_Print,	 spawn,		       SHCMD("maim /home/base/sc-shot.png") },
+  { MODKEY,                       XK_Print,	 spawn,		       SHCMD("maim $HOME/sc-shot.png") },
   { MODKEY,                       XK_comma,  spawn,		       SHCMD("devtoggle --toggle \"DLL07BE:01 06CB:7A13 Touchpad\"")},
 
   /* Special keys */
