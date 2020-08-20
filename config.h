@@ -4,9 +4,9 @@
 static const unsigned int borderpx  = 3;        /* border pixel of windows */
 static const unsigned int gappx     = 5;        /* gaps between windows */
 static const unsigned int snap      = 0;        /* snap pixel */
+static const int focusonwheel       = 0;
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
-static const int focusonwheel       = 0;
 static const char statussep         = ';';      /* separator between status bars */
 static const char *fonts[]          = {
     "DejaVu Sans Mono:pixelsize=12:antialias=true:autohint=true",
@@ -109,9 +109,10 @@ static Key keys[] = {
   /* Layouts */
   { MODKEY,                       XK_d,      setlayout,      {.v = &layouts[0]} }, // deck
   { MODKEY,                       XK_m,      setlayout,      {.v = &layouts[1]} }, // Master
-	{ MODKEY,                       XK_f,      setlayout,      {.v = &layouts[2]} }, // Fullscr
 	{ MODKEY,                       XK_t,      setlayout,      {.v = &layouts[3]} }, // Tile
   { MODKEY,                       XK_c,      setlayout,      {.v = &layouts[4]} }, // Column
+	{ MODKEY|ShiftMask,             XK_f,      setlayout,      {.v = &layouts[2]} }, // Fullscr
+	{ MODKEY,                       XK_f,      togglefullscr,  {0} },
 
   /* Tags */
 	TAGKEYS(XK_1,    0, XK_F1)
