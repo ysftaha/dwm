@@ -141,11 +141,12 @@ static Key keys[] = {
   { MODKEY,                       XK_comma,  spawn,		       SHCMD("devtoggle --toggle \"DLL07BE:01 06CB:7A13 Touchpad\"")},
 
   /* Special keys */
-  { 0,                            XF86XK_MonBrightnessUp,	   spawn,		 SHCMD("xbacklight -inc 1") },
-	{ 0,                            XF86XK_MonBrightnessDown,	 spawn,		 SHCMD("xbacklight -dec 1") },
-  { 0,                            XF86XK_AudioMute,       	 spawn,		 SHCMD("pulsemixer --toggle-mute") },
-  { 0,                            XF86XK_AudioRaiseVolume, 	 spawn,		 SHCMD("pulsemixer --change-volume +1") },
-  { 0,                            XF86XK_AudioLowerVolume,	 spawn,		 SHCMD("pulsemixer --change-volume -1") },
+  { 0,                            XF86XK_MonBrightnessUp,	   spawn,		 SHCMD("bright up") },
+	{ 0,                            XF86XK_MonBrightnessDown,	 spawn,		 SHCMD("bright down") },
+
+  { 0,                            XF86XK_AudioMute,       	 spawn,		 SHCMD("vol mute") },
+  { 0,                            XF86XK_AudioRaiseVolume, 	 spawn,		 SHCMD("vol up") },
+  { 0,                            XF86XK_AudioLowerVolume,	 spawn,		 SHCMD("vol down") },
 
   /* quit */
 	{ MODKEY|ShiftMask|ControlMask, XK_q,      quit,           {0} },
