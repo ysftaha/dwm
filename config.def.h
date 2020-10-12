@@ -106,13 +106,17 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_i,      incnmaster,     {.i = +1 } },
 	{ MODKEY|ShiftMask,             XK_d,      incnmaster,     {.i = -1 } },
 
+  /* fact resize */
+  { MODKEY|ControlMask,           XK_k,      setcfact,       {.f = +0.25} },
+  { MODKEY|ControlMask,           XK_j,      setcfact,       {.f = -0.25} },
+  { MODKEY|ControlMask,           XK_0,      setcfact,       {.f =  0.00} },
+
   /* Layouts */
   { MODKEY,                       XK_d,      setlayout,      {.v = &layouts[0]} }, // deck
   { MODKEY,                       XK_m,      setlayout,      {.v = &layouts[1]} }, // Master
 	{ MODKEY,                       XK_t,      setlayout,      {.v = &layouts[3]} }, // Tile
   { MODKEY,                       XK_c,      setlayout,      {.v = &layouts[4]} }, // Column
-	{ MODKEY|ShiftMask,             XK_f,      setlayout,      {.v = &layouts[2]} }, // Fullscr
-	{ MODKEY,                       XK_f,      togglefullscr,  {0} },
+	{ MODKEY,                       XK_f,      setlayout,      {.v = &layouts[2]} }, // Fullscr
 
   /* Tags */
 	TAGKEYS(XK_1,    0, XK_F1)
@@ -127,18 +131,13 @@ static Key keys[] = {
 	{ MODKEY,                       XK_0,      view,           {.ui = ~0 } },
 	{ MODKEY|ShiftMask,             XK_0,      tag,            {.ui = ~0 } },
 
-  /* Gaps */
-  { MODKEY,                       XK_minus,  setgaps,        {.i = -1 } },
-  { MODKEY,                       XK_equal,  setgaps,        {.i = +1 } },
-  { MODKEY|ShiftMask,             XK_equal,  setgaps,        {.i = 0  } },
-
   /* quick utils */
 	{ MODKEY,                       XK_Tab,    view,           {0} },
 	{ MODKEY,                       XK_b,      togglebar,      {0} },
 	{ MODKEY,                       XK_q,      killclient,     {0} },
  	{ MODKEY,                       XK_grave,  togglescratch,  {.v = scratchpadcmd } },
   { MODKEY,                       XK_Print,	 spawn,		       SHCMD("maim $HOME/sc-shot.png") },
-  { MODKEY,                       XK_comma,  spawn,		       SHCMD("devtoggle --toggle \"DLL07BE:01 06CB:7A13 Touchpad\"")},
+  // { MODKEY,                       XK_comma,  spawn,		       SHCMD("devtoggle --toggle \"DLL07BE:01 06CB:7A13 Touchpad\"")},
 
   /* Special keys */
   { 0,                            XF86XK_MonBrightnessUp,	   spawn,		 SHCMD("bright up") },
@@ -151,19 +150,17 @@ static Key keys[] = {
   /* quit */
 	{ MODKEY|ShiftMask|ControlMask, XK_q,      quit,           {0} },
 
-  /* FIXME monitor focus shit
 	{ MODKEY,                       XK_comma,  focusmon,       {.i = -1 } },
 	{ MODKEY,                       XK_period, focusmon,       {.i = +1 } },
 	{ MODKEY|ShiftMask,             XK_comma,  tagmon,         {.i = -1 } },
 	{ MODKEY|ShiftMask,             XK_period, tagmon,         {.i = +1 } },
-  */
 };
 
 /* button definitions */
 /* click can be ClkTagBar, ClkLtSymbol, ClkStatusText, ClkWinTitle, ClkClientWin, or ClkRootWin */
 static Button buttons[] = {
 	/* click                event mask      button          function        argument */
-	{ ClkClientWin,         MODKEY,         Button1,        movemouse,      {0} },
+	{ ClkClientWin,         MODKEY|ShiftMask,         Button1,        movemouse,      {0} },
 	{ ClkLtSymbol,          0,              Button1,        setlayout,      {.v = &layouts[5]} },
 	{ ClkWinTitle,          0,              Button2,        zoom,           {0} },
 	{ ClkStatusText,        0,              Button2,        spawn,          {.v = termcmd } },
