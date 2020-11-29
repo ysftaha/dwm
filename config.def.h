@@ -4,7 +4,6 @@
 static const unsigned int borderpx  = 3;        /* border pixel of windows */
 static const unsigned int gappx     = 5;        /* gaps between windows */
 static const unsigned int snap      = 0;        /* snap pixel */
-static const int focusonwheel       = 0;
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
 static const char statussep         = ';';      /* separator between status bars */
@@ -36,13 +35,14 @@ static const Rule rules[] = {
 	{ "Brave-browser",   NULL,       NULL,       1 << 2,       0,           -1 },
 
   {"org.pwmt.zathura", NULL,       NULL,       1 << 1,       0,           -1 },
+  {"Zathura",          NULL,       NULL,       1 << 1,       0,           -1 },
 
   {"Anki",             NULL,       NULL,       1 << 3,       0,           -1 },
   {"anki",             NULL,       NULL,       1 << 3,       0,           -1 }
 };
 
 /* layout(s) */
-static const float mfact     = 0.55; /* factor of master area size [0.05..0.95] */
+static const float mfact     = 0.32; /* factor of master area size [0.05..0.95] */
 static const int nmaster     = 1;    /* number of clients in master area */
 static const int resizehints = 0;    /* 1 means respect size hints in tiled resizals */
 
@@ -94,6 +94,7 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_space,  zoom,           {0} },
 	{ MODKEY,                       XK_space,  switchcol,      {0} },
 
+
   /* the stack */
 	{ MODKEY,                       XK_j,      focusstack,     {.i = +1 } },
 	{ MODKEY,                       XK_k,      focusstack,     {.i = -1 } },
@@ -101,8 +102,8 @@ static Key keys[] = {
   { MODKEY|ShiftMask,             XK_k,      movestack,      {.i = -1 } },
 
   /* the master window */
-	{ MODKEY,                       XK_h,      setmfact,       {.f = -0.0125} },
-	{ MODKEY,                       XK_l,      setmfact,       {.f = +0.0125} },
+	{ MODKEY,                       XK_h,      setmfact,       {.f = -0.003125} },
+	{ MODKEY,                       XK_l,      setmfact,       {.f = +0.003125} },
 	{ MODKEY|ShiftMask,             XK_i,      incnmaster,     {.i = +1 } },
 	{ MODKEY|ShiftMask,             XK_d,      incnmaster,     {.i = -1 } },
 
@@ -136,7 +137,7 @@ static Key keys[] = {
 	{ MODKEY,                       XK_b,      togglebar,      {0} },
 	{ MODKEY,                       XK_q,      killclient,     {0} },
  	{ MODKEY,                       XK_grave,  togglescratch,  {.v = scratchpadcmd } },
-  { MODKEY,                       XK_Print,	 spawn,		       SHCMD("maim $HOME/sc-shot.png") },
+  { MODKEY,                       XK_Print,	 spawn,		       SHCMD("maim $HOME/sc-shot.png && convert $HOME/sc-shot.png a.pdf && xournalpp a.pdf") },
   // { MODKEY,                       XK_comma,  spawn,		       SHCMD("devtoggle --toggle \"DLL07BE:01 06CB:7A13 Touchpad\"")},
 
   /* Special keys */
