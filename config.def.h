@@ -34,7 +34,6 @@ static const Rule rules[] = {
   { "Brave-browser",   NULL,       NULL,       1 << 2,       0,           -1 },
 
   {"org.pwmt.zathura", NULL,       NULL,       1 << 1,       0,           -1 },
-  {"Zathura",          NULL,       NULL,       1 << 1,       0,           -1 },
 
   {"Anki",             NULL,       NULL,       1 << 3,       0,           -1 },
   {"anki",             NULL,       NULL,       1 << 3,       0,           -1 }
@@ -92,7 +91,6 @@ static Key keys[] = {
   /* windows */
   { MODKEY|ShiftMask,             XK_space,  zoom,           {0} },
   { MODKEY,                       XK_space,  switchcol,      {0} },
-
 
   /* the stack */
   { MODKEY,                       XK_j,      focusstack,     {.i = +1 } },
