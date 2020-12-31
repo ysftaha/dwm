@@ -1,0 +1,68 @@
+[
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-c",
+      "-std=c99",
+      "-pedantic",
+      "-Wall",
+      "-Wno-deprecated-declarations",
+      "-Os",
+      "-I/usr/X11R6/include",
+      "-I/usr/include/freetype2",
+      "-D_DEFAULT_SOURCE",
+      "-D_BSD_SOURCE",
+      "-D_POSIX_C_SOURCE=2",
+      "-DVERSION=\"6.2\"",
+      "-DXINERAMA",
+      "drw.c"
+    ],
+    "directory": "/home/watcher/.build/dwm",
+    "file": "/home/watcher/.build/dwm/drw.c",
+    "output": "/home/watcher/.build/dwm/drw.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-c",
+      "-std=c99",
+      "-pedantic",
+      "-Wall",
+      "-Wno-deprecated-declarations",
+      "-Os",
+      "-I/usr/X11R6/include",
+      "-I/usr/include/freetype2",
+      "-D_DEFAULT_SOURCE",
+      "-D_BSD_SOURCE",
+      "-D_POSIX_C_SOURCE=2",
+      "-DVERSION=\"6.2\"",
+      "-DXINERAMA",
+      "dwm.c"
+    ],
+    "directory": "/home/watcher/.build/dwm",
+    "file": "/home/watcher/.build/dwm/dwm.c",
+    "output": "/home/watcher/.build/dwm/dwm.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-c",
+      "-std=c99",
+      "-pedantic",
+      "-Wall",
+      "-Wno-deprecated-declarations",
+      "-Os",
+      "-I/usr/X11R6/include",
+      "-I/usr/include/freetype2",
+      "-D_DEFAULT_SOURCE",
+      "-D_BSD_SOURCE",
+      "-D_POSIX_C_SOURCE=2",
+      "-DVERSION=\"6.2\"",
+      "-DXINERAMA",
+      "util.c"
+    ],
+    "directory": "/home/watcher/.build/dwm",
+    "file": "/home/watcher/.build/dwm/util.c",
+    "output": "/home/watcher/.build/dwm/util.o"
+  }
+]
