@@ -101,6 +101,7 @@ static Key keys[] = {
   /* the master window */
   { MODKEY,                       XK_h,      setmfact,       {.f = -0.0050} },
   { MODKEY,                       XK_l,      setmfact,       {.f = +0.0050} },
+  { MODKEY,                       XK_backslash,  switchfact,     {0}        },
   { MODKEY|ShiftMask,             XK_i,      incnmaster,     {.i = +1 } },
   { MODKEY|ShiftMask,             XK_d,      incnmaster,     {.i = -1 } },
 
@@ -138,8 +139,8 @@ static Key keys[] = {
     // { MODKEY,                       XK_comma,  spawn,		       SHCMD("devtoggle --toggle \"DLL07BE:01 06CB:7A13 Touchpad\"")},
 
     /* Special keys */
-    { 0,                            XF86XK_MonBrightnessUp,	   spawn,		 SHCMD("bright up") },
-    { 0,                            XF86XK_MonBrightnessDown,	 spawn,		 SHCMD("bright down") },
+    // { 0,                            XF86XK_MonBrightnessUp,	   spawn,		 SHCMD("bright up") },
+    // { 0,                            XF86XK_MonBrightnessDown,	 spawn,		 SHCMD("bright down") },
 
     { 0,                            XF86XK_AudioMute,       	 spawn,		 SHCMD("vol mute") },
     { 0,                            XF86XK_AudioRaiseVolume, 	 spawn,		 SHCMD("vol up") },

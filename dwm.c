@@ -173,6 +173,7 @@ static void drawbars(void);
 static void enternotify(XEvent *e);
 static void expose(XEvent *e);
 static void focus(Client *c);
+void switchfact(const Arg *arg);
 static void focusin(XEvent *e);
 static void focusmon(const Arg *arg);
 static void focusstack(const Arg *arg);
@@ -2543,4 +2544,14 @@ centeredmaster(Monitor *m)
 			oty += HEIGHT(c);
 		}
 	}
+}
+
+void
+switchfact(const Arg *arg)
+{
+  if(selmon->mfact > mfact)
+    selmon->mfact = selmon->pertag->mfacts[selmon->pertag->curtag] = mfact;
+  else
+    selmon->mfact = selmon->pertag->mfacts[selmon->pertag->curtag] = 1 - mfact;
+	arrange(selmon);
 }
