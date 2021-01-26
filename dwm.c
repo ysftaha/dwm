@@ -2412,7 +2412,7 @@ wintomon(Window w)
 	for (m = mons; m; m = m->next)
 	if (w == m->barwin)
 			return m;
-	if ((c = wintoclient(w)))
+  if ((c = wintoclient(w)))
 		return c->mon;
 	return selmon;
 }
@@ -2555,3 +2555,4 @@ switchfact(const Arg *arg)
     selmon->mfact = selmon->pertag->mfacts[selmon->pertag->curtag] = 1 - mfact;
 	arrange(selmon);
 }
+

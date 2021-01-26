@@ -5,3 +5,5 @@ dwm
 .clangd/
 .clangd/**
 config.h
+.ccls-cache/
+.ccls-cache/**
