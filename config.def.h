@@ -136,11 +136,7 @@ static Key keys[] = {
     { MODKEY,                       XK_q,      killclient,     {0} },
     { MODKEY,                       XK_grave,  togglescratch,  {.v = scratchpadcmd } },
     { MODKEY,                       XK_Print,	 spawn,		       SHCMD("maim $HOME/sc-shot.png") },
-    // { MODKEY,                       XK_comma,  spawn,		       SHCMD("devtoggle --toggle \"DLL07BE:01 06CB:7A13 Touchpad\"")},
-
-    /* Special keys */
-    // { 0,                            XF86XK_MonBrightnessUp,	   spawn,		 SHCMD("bright up") },
-    // { 0,                            XF86XK_MonBrightnessDown,	 spawn,		 SHCMD("bright down") },
+    { MODKEY,                       XK_s,	     spawn,		       SHCMD("surf lobste.rs") },
 
     { 0,                            XF86XK_AudioMute,       	 spawn,		 SHCMD("vol mute") },
     { 0,                            XF86XK_AudioRaiseVolume, 	 spawn,		 SHCMD("vol up") },
