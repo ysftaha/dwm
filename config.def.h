@@ -18,9 +18,9 @@ static const char col_gray4[]       = "#eeeeee";
 static const char col_cyan[]        = "#005743";
 static const char *colors[][3]      = {
   /*                         fg         bg         border */
-  [SchemeNorm]         = { col_gray3, col_gray1,  col_gray1 },
+  [SchemeNorm]         = { col_gray4, col_gray1,  col_gray1 },
   [SchemeSel]          = { col_gray4, col_cyan,   col_cyan  },
-  [SchemeTabActive]    = { col_gray2, col_gray1,  col_gray2 },
+  [SchemeTabActive]    = { col_gray4, col_gray1,  col_gray2 },
   [SchemeTabInactive]  = { col_gray4, col_gray1,  col_gray1 }
 };
 
@@ -46,7 +46,7 @@ static const int resizehints = 0;    /* 1 means respect size hints in tiled resi
 
 /* Bartabgroups properties */
 #define BARTAB_BORDERS 1       // 0 = off, 1 = on
-#define BARTAB_BOTTOMBORDER 1  // 0 = off, 1 = on
+#define BARTAB_BOTTOMBORDER 0  // 0 = off, 1 = on
 #define BARTAB_TAGSINDICATOR 1 // 0 = off, 1 = on if >1 client/view tag, 2 = always on
 #define BARTAB_TAGSPX 5        // # pixels for tag grid boxes
 #define BARTAB_TAGSROWS 3      // # rows in tag grid (9 tags, e.g. 3x3)
@@ -137,6 +137,7 @@ static Key keys[] = {
     { MODKEY,                       XK_grave,  togglescratch,  {.v = scratchpadcmd } },
     { MODKEY,                       XK_Print,	 spawn,		       SHCMD("maim $HOME/sc-shot.png") },
     { MODKEY,                       XK_s,	     spawn,		       SHCMD("surf lobste.rs") },
+    { MODKEY|ShiftMask,             XK_s,	     spawn,		       SHCMD("surf -S lobste.rs") },
 
     { 0,                            XF86XK_AudioMute,       	 spawn,		 SHCMD("vol mute") },
     { 0,                            XF86XK_AudioRaiseVolume, 	 spawn,		 SHCMD("vol up") },
